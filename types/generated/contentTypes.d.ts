@@ -107,6 +107,43 @@ export interface AdminApiTokenPermission extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface AdminAuditLog extends Struct.CollectionTypeSchema {
+  collectionName: 'strapi_audit_logs';
+  info: {
+    displayName: 'Audit Log';
+    pluralName: 'audit-logs';
+    singularName: 'audit-log';
+  };
+  options: {
+    draftAndPublish: false;
+    timestamps: false;
+  };
+  pluginOptions: {
+    'content-manager': {
+      visible: false;
+    };
+    'content-type-builder': {
+      visible: false;
+    };
+  };
+  attributes: {
+    action: Schema.Attribute.String & Schema.Attribute.Required;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    date: Schema.Attribute.DateTime & Schema.Attribute.Required;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<'oneToMany', 'admin::audit-log'> &
+      Schema.Attribute.Private;
+    payload: Schema.Attribute.JSON;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    user: Schema.Attribute.Relation<'oneToOne', 'admin::user'>;
+  };
+}
+
 export interface AdminPermission extends Struct.CollectionTypeSchema {
   collectionName: 'admin_permissions';
   info: {
@@ -373,21 +410,12 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
-
-export interface ApiTestimonialTestimonial extends Struct.CollectionTypeSchema {
-  collectionName: 'testimonials';
-  info: {
-    displayName: 'Testimonial';
-    pluralName: 'testimonials';
-    singularName: 'testimonial';
-
 export interface ApiBlogBlog extends Struct.CollectionTypeSchema {
   collectionName: 'blogs';
   info: {
     displayName: 'blog';
     pluralName: 'blogs';
     singularName: 'blog';
-
   };
   options: {
     draftAndPublish: true;
@@ -396,7 +424,64 @@ export interface ApiBlogBlog extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    Description: Schema.Attribute.Blocks;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<'oneToMany', 'api::blog.blog'> &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    tilte: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
 
+export interface ApiRediscoverTheTasteRediscoverTheTaste
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'rediscover_the_tastes';
+  info: {
+    displayName: 'Rediscover the taste';
+    pluralName: 'rediscover-the-tastes';
+    singularName: 'rediscover-the-taste';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    content_img: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios'
+    >;
+    content_name: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::rediscover-the-taste.rediscover-the-taste'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiTestimonialTestimonial extends Struct.CollectionTypeSchema {
+  collectionName: 'testimonials';
+  info: {
+    displayName: 'Testimonial';
+    pluralName: 'testimonials';
+    singularName: 'testimonial';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -413,16 +498,6 @@ export interface ApiBlogBlog extends Struct.CollectionTypeSchema {
       true
     >;
     user_testimonial: Schema.Attribute.Text;
-    Description: Schema.Attribute.Blocks;
-    locale: Schema.Attribute.String & Schema.Attribute.Private;
-    localizations: Schema.Attribute.Relation<'oneToMany', 'api::blog.blog'> &
-      Schema.Attribute.Private;
-    publishedAt: Schema.Attribute.DateTime;
-    tilte: Schema.Attribute.String;
-    updatedAt: Schema.Attribute.DateTime;
-    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-
   };
 }
 
@@ -930,14 +1005,15 @@ declare module '@strapi/strapi' {
     export interface ContentTypeSchemas {
       'admin::api-token': AdminApiToken;
       'admin::api-token-permission': AdminApiTokenPermission;
+      'admin::audit-log': AdminAuditLog;
       'admin::permission': AdminPermission;
       'admin::role': AdminRole;
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
-
-      'api::testimonial.testimonial': ApiTestimonialTestimonial;
       'api::blog.blog': ApiBlogBlog;
+      'api::rediscover-the-taste.rediscover-the-taste': ApiRediscoverTheTasteRediscoverTheTaste;
+      'api::testimonial.testimonial': ApiTestimonialTestimonial;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;
