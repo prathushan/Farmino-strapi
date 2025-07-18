@@ -1,0 +1,28 @@
+{
+  "kind": "collectionType",
+  "collectionName": "rediscover_the_tastes",
+  "info": {
+    "singularName": "rediscover-the-taste",
+    "pluralName": "rediscover-the-tastes",
+    "displayName": "Rediscover the taste"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "content_name": {
+      "type": "string"
+    },
+    "content_img": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    }
+  }
+}
